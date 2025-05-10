@@ -30,24 +30,6 @@ else
     echo -e "$G Root User $N"
 fi
 
-dnf module disable nodejs -y &>> $LOGFILE
-VALIDATE $? "Disabled default Nodejs version"
-
-dnf module enable nodejs:20 -y &>> $LOGFILE
-VALIDATE $? "Enabled Nodejs version 20"
-
-dnf install nodejs -y &>> $LOGFILE
-VALIDATE $? "Installing NodeJs"
-
-id roboshop
-if [ $? != 0 ]
-then
-    useradd roboshop &>> $LOGFILE
-    VALIDATE $? "creating roboshop user"
-else
-    echo -e "User already exists $Y SKIPPING $N"
-fi
-
 dnf module disable nginx -y &>> $LOGFILE
 VALIDATE $? "disabling nginx"
 
