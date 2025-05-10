@@ -43,9 +43,9 @@ id roboshop
 if [ $? != 0 ]
 then
     useradd roboshop &>> $LOGFILE
-    VALIDATE $? "creating roboshop user $Y SKIPPING $N"
+    VALIDATE $? "creating roboshop user"
 else
-    echo -e "User already exists"
+    echo -e "User already exists $Y SKIPPING $N"
 fi
 
 
@@ -70,8 +70,8 @@ VALIDATE $? "copying user.service file"
 systemctl daemon-reload &>> $LOGFILE
 VALIDATE $? "reloading daemon"
 
-systemctl enable catalogue &>> $LOGFILE
+systemctl enable user &>> $LOGFILE
 VALIDATE $? "Enabling user"
 
-systemctl start catalogue &>> $LOGFILE
+systemctl start user &>> $LOGFILE
 VALIDATE $? "Starting user"
