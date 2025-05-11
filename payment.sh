@@ -50,7 +50,7 @@ VALIDATE $? "Unzipping payment"
 pip3 install -r requirements.txt &>> $LOGFILE
 VALIDATE $? "installing dependencies"
 
-cp /home/ec2-user/roboshop-shell/payment-service /etc/systemd/system/payment.service &>> $LOGFILE
+cp /home/ec2-user/roboshop-shell/payment.service /etc/systemd/system/payment.service &>> $LOGFILE
 VALIDATE $? "copied payment service"
 
 systemctl daemon-reload &>> $LOGFILE
