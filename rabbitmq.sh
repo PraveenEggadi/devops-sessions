@@ -29,20 +29,17 @@ then
 else
     echo -e "$G Root User $N"
 fi
-dnf module disable redis -y &>> $LOGFILE
-VALIDATE $? "Disabling redis"
 
-dnf module enable redis:7 -y &>> $LOGFILE
-VALIDATE $? "Enabling redis:7"
+cp /home/ec2-user/roboshop-shell/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
 
-dnf install redis -y &>> $LOGFILE
-VALIDATE $? "Installing redis"
+dnf install rabbitmq-server -y &>> $LOGFILE
+VALIDATE $? "Installing rabbitmq"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf &>> $LOGFILE
-# sed -i 's/
+systemctl enable rabbitmq-server &>> $LOGFILE
+VALIDATE $? "enabling rabbitmq"
 
-systemctl enable redis &>> $LOGFILE
-VALIDATE $? 'Enabling Redis'
+systemctl start rabbitmq-server &>> $LOGFILE
+VALIDATE $? "starting rabbitmq"
 
-systemctl start redis &>> $LOGFILE
-VALIDATE $? "Starting redis"
+rabbitmqctl add_user roboshop roboshop123 &>> $LOGFILE
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>> $LOGFILE

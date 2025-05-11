@@ -29,20 +29,16 @@ then
 else
     echo -e "$G Root User $N"
 fi
-dnf module disable redis -y &>> $LOGFILE
-VALIDATE $? "Disabling redis"
 
-dnf module enable redis:7 -y &>> $LOGFILE
-VALIDATE $? "Enabling redis:7"
+dnf install mysql-server -y &>> $LOGFILE
+VALIDATE $? "Installing Mysql"
 
-dnf install redis -y &>> $LOGFILE
-VALIDATE $? "Installing redis"
+systemctl enable mysqld &>> $LOGFILE
+VALIDATE $? "enabling mysql"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf &>> $LOGFILE
-# sed -i 's/
+systemctl start mysqld  &>> $LOGFILE
+VALIDATE $? "starting mysql"
 
-systemctl enable redis &>> $LOGFILE
-VALIDATE $? 'Enabling Redis'
 
-systemctl start redis &>> $LOGFILE
-VALIDATE $? "Starting redis"
+mysql_secure_installation --set-root-pass RoboShop@1 &>> $LOGFILE
+VALIDATE $? "setting password"
