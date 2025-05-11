@@ -33,10 +33,16 @@ fi
 dnf install python3 gcc python3-devel -y &>> $LOGFILE
 VALIDATE $? "installing python"
 
-useradd roboshop &>> $LOGFILE
-VALIDATE $? "user roboshop added"
+id roboshop
+if [ $? != 0 ]
+then
+    useradd roboshop &>> $LOGFILE
+    VALIDATE $? "creating roboshop user"
+else
+    echo -e "User already exists $Y SKIPPING $N"
+fi
 
-mkdir /app &>> $LOGFILE
+mkdir -p /app &>> $LOGFILE
 VALIDATE $? "created directory"
 
 curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>> $LOGFILE
@@ -44,7 +50,7 @@ VALIDATE $? "downloaded payment"
 
 cd /app 
 
-unzip /tmp/payment.zip &>> $LOGFILE
+unzip -o /tmp/payment.zip &>> $LOGFILE
 VALIDATE $? "Unzipping payment"
 
 pip3 install -r requirements.txt &>> $LOGFILE
